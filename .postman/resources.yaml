@@ -1,0 +1,7 @@
+# Use this workspace to collaborate
+workspace:
+  id: ffab8adb-03df-40a1-a63c-7a6c2e9d24ab
+
+localResources:
+  specs:
+    - ../obj/Debug/net6.0/EndpointInfo/SistemaEstoque.json
