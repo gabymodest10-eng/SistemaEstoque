@@ -20,7 +20,7 @@ public class ProdutoController : ControllerBase
         _Service = service;
         _mapper = mapper;
         }
-    
+
     [HttpGet]
     public async Task<List<ProdutoDto>> BuscarProduto()
         {
@@ -39,9 +39,16 @@ public class ProdutoController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> AlterarProduto(int id, [FromBody] Produto produto)
         {
-        await  _Service.AlterarProduto(id, produto);
+        await _Service.AlterarProduto(id, produto);
 
         return StatusCode(204);
+        }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> ExcluirProduto(int id)
+        {
+        await _Service.ExcluirProduto(id);
+
+        return NoContent();
         }
     }
 

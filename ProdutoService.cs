@@ -24,4 +24,9 @@ public class ProdutoService
         {
         await _repository.AlterarProduto(id, produto);
         }
+
+    public async Task ExcluirProduto(int id)
+        {
+        await _repository.ExcluirProduto(id);
+        }
     }

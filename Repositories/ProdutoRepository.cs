@@ -78,4 +78,21 @@ public class ProdutoRepository : IProdutoRepository
 
         await command.ExecuteNonQueryAsync();
         }
+    public async Task ExcluirProduto(int id)
+        {
+        using var conexaoSql = new SqlConnection(conexao);
+
+        await conexaoSql.OpenAsync();
+
+        string sql = "DELETE FROM Produtos WHERE Id = @Id";
+
+        using var comando = new SqlCommand(sql, conexaoSql);
+
+        comando.Parameters.AddWithValue("@Id", id);
+
+        await comando.ExecuteNonQueryAsync();
+        }
     }
+
+
+
