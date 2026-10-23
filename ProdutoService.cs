@@ -1,32 +1,38 @@
+
 using SistemaEstoque.Models;
-using SistemaEstoque.Exceptions;
 using SistemaEstoque.Interfaces;
 
-namespace SistemaEstoque.Services;
-
-public class ProdutoService
+namespace SistemaEstoque.Services
     {
-    private readonly IProdutoRepository _repository;
+    public class ProdutoService
+        {
+        private readonly IProdutoRepository _repository;
 
-    public ProdutoService(IProdutoRepository repository)
-        {
-        _repository = repository;
-        }
-    public async Task<List<Produto>> BuscarProdutos()
-        {
-        return await _repository.BuscarProdutos();
-        }
-    public async Task CadastrarProduto(Produto produto)
-        {
-        await _repository.CadastrarProduto(produto);
-        }
-    public async Task AlterarProduto(int id, Produto produto)
-        {
-        await _repository.AlterarProduto(id, produto);
-        }
+        public ProdutoService(IProdutoRepository repository)
+            {
+            _repository = repository;
+            }
 
-    public async Task ExcluirProduto(int id)
-        {
-        await _repository.ExcluirProduto(id);
+        public async Task<List<Produto>> BuscarProdutos()
+            {
+            return await _repository.BuscarProdutos();
+            }
+
+        public async Task CadastrarProduto(Produto produto)
+            {
+            await _repository.CadastrarProduto(produto);
+            }
+
+        public async Task AlterarProduto(int id, Produto produto)
+            {
+            await _repository.AlterarProduto(id, produto);
+            }
+
+        public async Task ExcluirProduto(int id)
+            {
+            await _repository.ExcluirProduto(id);
+            }
         }
     }
+
+

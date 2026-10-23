@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using SistemaEstoque.Models;
 using SistemaEstoque.Interfaces;
+using SistemaEstoque.Exceptions;
 
 namespace SistemaEstoque.Repositories;
 
@@ -90,7 +91,13 @@ public class ProdutoRepository : IProdutoRepository
 
         comando.Parameters.AddWithValue("@Id", id);
 
-        await comando.ExecuteNonQueryAsync();
+        int linhasAfetadas = await comando.ExecuteNonQueryAsync();
+
+        if (linhasAfetadas == 0)
+            {
+            throw new CustomExcepetion("Produto não encontrado.", 404);
+
+            }
         }
     }
 
