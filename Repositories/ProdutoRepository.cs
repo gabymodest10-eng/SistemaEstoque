@@ -7,48 +7,46 @@ namespace SistemaEstoque.Repositories;
 
 public class ProdutoRepository : IProdutoRepository
     {
-    private readonly string conexao =
-        "Server=localhost\\SQLEXPRESS;Database=SistemaEstoquedb;Trusted_Connection=True;TrustServerCertificate=True;";
-
+    private readonly string conexao;
+    public ProdutoRepository(IConfiguration configuration)
+        {
+        conexao = configuration.GetConnectionString("Database")
+        ?? throw new InvalidOperationException(
+         "A conexão 'Database' não foi configurada.");
+        }
     public async Task<List<Produto>> BuscarProdutos()
         {
         var produtos = new List<Produto>();
-
         using SqlConnection connection = new SqlConnection(conexao);
 
         await connection.OpenAsync();
-
-        string Sql = "SELECT Id, Codigo, Nome, Quantidade FROM Produtos";
-
-        using SqlCommand command = new SqlCommand(Sql, connection);
+        string sql = "SELECT Id, Codigo, Nome, Quantidade From Produtos";
+        using SqlCommand command = new SqlCommand(sql, connection);
         using SqlDataReader reader = await command.ExecuteReaderAsync();
-
         while (await reader.ReadAsync())
             {
-            var produto = new Produto();
-
-            produto.Id = reader.GetInt32(0);
-            produto.Codigo = reader.GetInt32(1);
-            produto.Nome = reader.GetString(2);
-            produto.Quantidade = reader.GetInt32(3);
-
+            var produto = new Produto
+                {
+                Id = reader.GetInt32(0),
+                Codigo = reader.GetInt32(1),
+                Nome = reader.GetString(2),
+                Quantidade = reader.GetInt32(3)
+                };
             produtos.Add(produto);
             }
-
         return produtos;
         }
-
     public async Task CadastrarProduto(Produto produto)
         {
         using SqlConnection connection = new SqlConnection(conexao);
 
         await connection.OpenAsync();
 
-        string Sql = @"
-            INSERT INTO Produtos (Codigo, Nome, Quantidade)
-            VALUES (@Codigo, @Nome, @Quantidade)";
+        string sql = @"
+                INSERT INTO Produtos (Codigo, Nome, Quantidade)
+                VALUES (@Codigo, @Nome, @Quantidade)";
 
-        using SqlCommand command = new SqlCommand(Sql, connection);
+        using SqlCommand command = new SqlCommand(sql, connection);
 
         command.Parameters.AddWithValue("@Codigo", produto.Codigo);
         command.Parameters.AddWithValue("@Nome", produto.Nome);
@@ -63,14 +61,14 @@ public class ProdutoRepository : IProdutoRepository
 
         await connection.OpenAsync();
 
-        string Sql = @"
-            UPDATE Produtos
-            SET Codigo = @Codigo,
-                Nome = @Nome,
-                Quantidade = @Quantidade
-            WHERE Id = @Id";
+        string sql = @"
+                UPDATE Produtos
+                SET Codigo = @Codigo,
+                    Nome = @Nome,
+                    Quantidade = @Quantidade
+                WHERE Id = @Id";
 
-        using SqlCommand command = new SqlCommand(Sql, connection);
+        using SqlCommand command = new SqlCommand(sql, connection);
 
         command.Parameters.AddWithValue("@Id", id);
         command.Parameters.AddWithValue("@Codigo", produto.Codigo);
@@ -79,6 +77,7 @@ public class ProdutoRepository : IProdutoRepository
 
         await command.ExecuteNonQueryAsync();
         }
+
     public async Task ExcluirProduto(int id)
         {
         using var conexaoSql = new SqlConnection(conexao);
@@ -96,10 +95,10 @@ public class ProdutoRepository : IProdutoRepository
         if (linhasAfetadas == 0)
             {
             throw new CustomExcepetion("Produto não encontrado.", 404);
-
             }
         }
     }
 
 
+        
 
